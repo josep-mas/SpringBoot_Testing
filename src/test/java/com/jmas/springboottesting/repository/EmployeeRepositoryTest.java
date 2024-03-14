@@ -31,7 +31,7 @@ class EmployeeRepositoryTest {
     
     @DisplayName("JUnit test for save employee operation")
     @Test
-    public void givenEmployeeObject_whenSave_thenReturnSavedEmployee(){
+    void givenEmployeeObject_whenSave_thenReturnSavedEmployee(){
 
         //-- Given
 
@@ -40,11 +40,11 @@ class EmployeeRepositoryTest {
 
         //-- Then
         assertThat(savedEmployee).isNotNull();
-        assertThat(savedEmployee.getId()).isGreaterThanOrEqualTo(0);
+        assertThat(savedEmployee.getId()).isNotNegative();
     }
 
     @Test
-    public void givenEmployeesList_whenFindAll_thenEmployeesList(){
+    void givenEmployeesList_whenFindAll_thenEmployeesList(){
 
         //-- Given
         Employee employee1 = Employee.builder()
@@ -59,40 +59,39 @@ class EmployeeRepositoryTest {
         List<Employee> employeeList = employeeRepository.findAll();
 
         //-- Then
-        assertThat(employeeList).isNotNull();
-        assertThat(employeeList.size()).isEqualTo(2);
-
+        assertThat(employeeList).isNotNull()
+            .hasSize(2);
     }
 
     @DisplayName("JUnit test for get employee by id operation")
     @Test
-    public void givenEmployee_whenFindById_thenReturnEmployeeObject(){
+    void givenEmployee_whenFindById_thenReturnEmployeeObject(){
 
         //-- Given
         employeeRepository.save(employee);
 
         //-- When
-        Employee employeeDB = employeeRepository.findById(employee.getId()).get();
+        Optional<Employee> employeeDB = employeeRepository.findById(employee.getId());
 
         //-- Then
-        assertThat(employeeDB).isNotNull();
+        assertThat(employeeDB).isPresent();
     }
 
     @Test
-    public void givenEmployeeEmail_whenFindByEmail_thenReturnEmployeeObject(){
+    void givenEmployeeEmail_whenFindByEmail_thenReturnEmployeeObject(){
 
         //-- Given
         employeeRepository.save(employee);
 
         //-- When
-        Employee employeeDB = employeeRepository.findByEmail("perico@palotes.com").get();
+        Optional<Employee> employeeDB = employeeRepository.findByEmail("perico@palotes.com");
 
         //-- Then
-        assertThat(employeeDB).isNotNull();
+        assertThat(employeeDB).isPresent();
     }
 
     @Test
-    public void givenEmployeeObject_whenUpdateemployee_thenReturnUpdatedEmployee(){
+    void givenEmployeeObject_whenUpdateemployee_thenReturnUpdatedEmployee(){
 
         //-- Given
         employeeRepository.save(employee);
@@ -107,7 +106,7 @@ class EmployeeRepositoryTest {
 
 
     @Test
-    public void givenEmployeeObject_whenDelete_thenRemoveEmployee(){
+    void givenEmployeeObject_whenDelete_thenRemoveEmployee(){
 
         //-- Given
         employeeRepository.save(employee);
@@ -121,7 +120,7 @@ class EmployeeRepositoryTest {
     }
 
     @Test
-    public void givenFirstNameAndLastName_whenFindByJPQL_thenReturnEmployeeObject(){
+    void givenFirstNameAndLastName_whenFindByJPQL_thenReturnEmployeeObject(){
 
         //-- Given
         employeeRepository.save(employee);
@@ -136,7 +135,7 @@ class EmployeeRepositoryTest {
     }
 
     @Test
-    public void givenFirstNameAndLastName_whenFindByJPQLNamedParams_thenReturnEmployeeObject(){
+    void givenFirstNameAndLastName_whenFindByJPQLNamedParams_thenReturnEmployeeObject(){
 
         //-- Given
         employeeRepository.save(employee);
@@ -151,7 +150,7 @@ class EmployeeRepositoryTest {
     }
 
     @Test
-    public void givenFirstNameAndLastName_whenFindByNativeSPQL_thenReturnEmployeeObject(){
+    void givenFirstNameAndLastName_whenFindByNativeSPQL_thenReturnEmployeeObject(){
 
         //-- Given
         employeeRepository.save(employee);
@@ -166,7 +165,7 @@ class EmployeeRepositoryTest {
     }
 
     @Test
-    public void givenFirstNameAndLastName_whenFindBySQLNamedParams_thenReturnEmployeeObject(){
+    void givenFirstNameAndLastName_whenFindBySQLNamedParams_thenReturnEmployeeObject(){
 
         //-- Given
         employeeRepository.save(employee);

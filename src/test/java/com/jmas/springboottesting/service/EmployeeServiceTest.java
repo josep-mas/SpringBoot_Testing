@@ -44,7 +44,7 @@ class EmployeeServiceTest {
     }
 
     @Test
-    public void givenEmployeeObject_whenSaveEmployee_thenReturnEmployeeObject(){
+    void givenEmployeeObject_whenSaveEmployee_thenReturnEmployeeObject(){
 
         //-- Given
         given(employeeRepository.findByEmail(employee.getEmail()))
@@ -59,7 +59,7 @@ class EmployeeServiceTest {
     }
 
     @Test
-    public void givenExistingEmail_whenSaveEmployee_thenThrowsException(){
+    void givenExistingEmail_whenSaveEmployee_thenThrowsException(){
 
         //-- Given
         given(employeeRepository.findByEmail(employee.getEmail()))
@@ -73,7 +73,7 @@ class EmployeeServiceTest {
     }
 
     @Test
-    public void givenEmployeesList_whenGetAllEmployees_thenReturnEmployeesList(){
+    void givenEmployeesList_whenGetAllEmployees_thenReturnEmployeesList(){
 
         //-- Given
         Employee employee1 = Employee.builder()
@@ -88,12 +88,12 @@ class EmployeeServiceTest {
         List<Employee> employeeList = employeeService.getAllEmployees();
 
         //-- Then
-        assertThat(employeeList).isNotNull();
-        assertThat(employeeList.size()).isEqualTo(2);
+        assertThat(employeeList).isNotNull()
+            .hasSize(2);
     }
 
     @Test
-    public void givenEmptyEmployeesList_whenGetAllEmployees_thenReturnEmptyEmployeesList(){
+    void givenEmptyEmployeesList_whenGetAllEmployees_thenReturnEmptyEmployeesList(){
 
         //-- Given
         given(employeeRepository.findAll()).willReturn(List.of());
@@ -103,11 +103,10 @@ class EmployeeServiceTest {
 
         //-- Then
         assertThat(employeeList).isEmpty();
-        assertThat(employeeList.size()).isEqualTo(0);
     }
 
     @Test
-    public void givenEmployeeId_whenGetEmployeeById_thenReturnEmployeeObject(){
+    void givenEmployeeId_whenGetEmployeeById_thenReturnEmployeeObject(){
 
         //-- Given
         given(employeeRepository.findById(1L)).willReturn(Optional.of(employee));
@@ -120,7 +119,7 @@ class EmployeeServiceTest {
     }
 
     @Test
-    public void givenEmployeeObject_whenUpdateEmployee_thenReturnUpdatedEmployee(){
+    void givenEmployeeObject_whenUpdateEmployee_thenReturnUpdatedEmployee(){
 
         //-- Given
         given(employeeRepository.save(employee)).willReturn(employee);
@@ -137,7 +136,7 @@ class EmployeeServiceTest {
     }
 
     @Test
-    public void givenEmployeeId_whenDeleteEmployee_thenNothing(){
+    void givenEmployeeId_whenDeleteEmployee_thenNothing(){
 
         //-- Given
         long employeeId = 1L;
