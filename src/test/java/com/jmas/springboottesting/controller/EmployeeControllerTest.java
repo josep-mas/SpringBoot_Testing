@@ -18,8 +18,7 @@ import java.util.Optional;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -107,7 +106,7 @@ class EmployeeControllerTest {
     }
 
     @Test
-    void givenImvalidEmployeeId_whenGetEmployeeById_thenReturnEmpty() throws Exception {
+    void givenInvalidEmployeeId_whenGetEmployeeById_thenReturnEmpty() throws Exception {
 
         //-- given
         long employeeId = 1L;
@@ -119,6 +118,40 @@ class EmployeeControllerTest {
         //-- then
         response.andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void givenUpdatedEmployee_whenUpdateEmployee_thenReturnUpdateEmployeeObject() throws Exception {
+
+        //-- given
+        long employeeId = 1L;
+        Employee savedEmployee = Employee.builder()
+                .firstName("Perico")
+                .lastName("Palotes")
+                .email("perico@mail.com")
+                .build();
+
+        Employee updatedEmployee = Employee.builder()
+                .firstName("Anselm")
+                .lastName("Clave")
+                .email("anselm@mail.com")
+                .build();
+        given(employeeService.getEmployeeById(employeeId)).willReturn(Optional.of(savedEmployee));
+        given(employeeService.updateEmployee(any(Employee.class)))
+                .willAnswer((invocation)-> invocation.getArgument(0));
+
+        //-- when
+        ResultActions response = mockMvc.perform(put("/api/employees/{id}", employeeId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(updatedEmployee)));
+
+        //-- then
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.firstName", is(updatedEmployee.getFirstName())))
+                .andExpect(jsonPath("$.lastName", is(updatedEmployee.getLastName())))
+                .andExpect(jsonPath("$.email", is(updatedEmployee.getEmail())));
+
     }
 
 }
